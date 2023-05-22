@@ -16,6 +16,7 @@ class Library {
         this.transactions = [];
     }
 
+    
     addBook(book){
         this.books.push(book)
     }
@@ -122,13 +123,27 @@ DeKUTLibrary.addBorrower(Peter);
 class Employee extends User{
     salary;
     noHoursWorked;
-    ratePerHour;
+    //encapsulation
+    #ratePerHour;
     constructor(name, ID, ratePerHour){
         //super is always called before initialization of prperties native to this class.
         super(name, ID);
-        this.ratePerHour = ratePerHour;
+        this.#ratePerHour = ratePerHour;
         this.noHoursWorked = 0;
         this.salary = 0;
+    }
+
+    get getRate(){
+        return this.#ratePerHour
+    }
+
+    set setRate(rate){
+        if (rate<=35 && rate >=25) {
+            this.#ratePerHour = rate;
+        } else {
+            console.log("Rate is outbound!")
+        }
+        
     }
 
     performWork(hours){
@@ -136,7 +151,7 @@ class Employee extends User{
     }
 
     paySalary(){
-        this.salary = this.ratePerHour*this.noHoursWorked;
+        this.salary = this.#ratePerHour*this.noHoursWorked;
         console.log(`Salary of $${this.salary} has been paid to ${this.name}`);
     }
 }
@@ -144,14 +159,24 @@ class Employee extends User{
 const Smith = new Employee("Smith", "4548262", 25);
 
 Smith.performWork(8);
+Smith.setRate = 35
 Smith.paySalary();
 
-
-
-
-
-
-
-//encapsulation
-
 //polymorphism
+
+
+class Manager extends Employee{
+    constructor(name, ID, ratePerHour){
+        super(name, ID, ratePerHour)
+    }
+
+    performWork(hours){
+        return this.noHoursWorked += (hours+2);
+    }
+}
+
+const manager = new Manager("Kenneth", 287983, 35);
+
+manager.performWork(8);
+
+manager.paySalary()
